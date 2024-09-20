@@ -1,0 +1,104 @@
+<div class="container">
+  <div class="card mt-3">
+    <div class="row">
+      <div class="col">
+        <h2 class="text-center">Google Books API</h2>
+      </div>
+    </div>
+    <div class="row mt-3 justify-content-between">
+      <div class="col-md-6">
+        <input
+          [(ngModel)]="searchContent"
+          class="form-control"
+          placeholder="Search by Author/Title"
+        />
+      </div>
+      <div class="col-md-2">
+        <button (click)="searchBooks()" class="btn btn-primary w-100">
+          Search
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="text-center mt-5">Books</h2>
+  <ul class="list-group mt-3">
+    <li
+      *ngFor="let book of books"
+      class="list-group-item d-flex align-items-start"
+    >
+      <img
+        *ngIf="book.volumeInfo.imageLinks?.thumbnail"
+        [src]="book.volumeInfo.imageLinks.thumbnail"
+        alt="{{ book.volumeInfo.title }}"
+        class="img-thumbnail me-3"
+      />
+      <div>
+        <h5>{{ book.volumeInfo.title }}</h5>
+        <p>
+          <strong>Authors:</strong> {{ book.volumeInfo.authors?.join(", ") }}
+        </p>
+        <p><strong>Description:</strong> {{ book.volumeInfo.description }}</p>
+
+        <div class="d-flex align-items-center mb-2">
+          <div class="me-2">Rating:</div>
+          <div
+            *ngFor="let star of stars"
+            (click)="rateBook(book, star)"
+            [ngClass]="{
+              'text-warning': book.rating >= star,
+              'text-muted': book.rating < star
+            }"
+            class="star"
+          >
+            &#9733;
+          </div>
+        </div>
+
+        <div class="mb-2">
+          <textarea
+            [(ngModel)]="book.notes"
+            placeholder="Write your notes here..."
+            class="form-control"
+            rows="3"
+          ></textarea>
+        </div>
+
+        <button
+          (click)="toggleFavorite(book)"
+          class="btn"
+          [ngClass]="{
+            'btn-secondary': isFavorite(book),
+            'btn-outline-secondary': !isFavorite(book)
+          }"
+        >
+          {{ isFavorite(book) ? "Unfavorite" : "Favorite" }}
+        </button>
+      </div>
+    </li>
+  </ul>
+
+  <h2 class="text-center mt-5">Favorites</h2>
+  <ul class="list-group mt-3">
+    <li
+      *ngFor="let book of favorites"
+      class="list-group-item d-flex align-items-start"
+    >
+      <img
+        *ngIf="book.volumeInfo.imageLinks?.thumbnail"
+        [src]="book.volumeInfo.imageLinks.thumbnail"
+        alt="{{ book.volumeInfo.title }}"
+        class="img-thumbnail me-3"
+      />
+      <div>
+        <h5>{{ book.volumeInfo.title }}</h5>
+        <p>
+          <strong>Authors:</strong> {{ book.volumeInfo.authors?.join(", ") }}
+        </p>
+        <p><strong>Description:</strong> {{ book.volumeInfo.description }}</p>
+        <p><strong>Notes:</strong> {{ book.notes }}</p>
+        <p><strong>Rating:</strong> {{ book.rating }}</p>
+      </div>
+    </li>
+  </ul>
+</div>
